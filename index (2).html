@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Social AI — Service Menu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0F1115;
+    --panel:#171922;
+    --panel-2:#1D2029;
+    --line:rgba(245,243,238,0.09);
+    --gold:#FFB020;
+    --teal:#38BFA7;
+    --paper:#F5F3EE;
+    --muted:#8A8D98;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ink);
+    color:var(--paper);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .display{font-family:'Space Grotesk',sans-serif;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+
+  /* subtle grain / vignette */
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background:
+      radial-gradient(ellipse at top left, rgba(255,176,32,0.07), transparent 45%),
+      radial-gradient(ellipse at bottom right, rgba(56,191,167,0.07), transparent 50%);
+    pointer-events:none;
+    z-index:0;
+  }
+
+  .wrap{max-width:1040px;margin:0 auto;padding:0 28px;position:relative;z-index:1;}
+
+  /* ---------- NAV ---------- */
+  nav{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:26px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .logo{
+    display:flex;align-items:center;gap:10px;
+    font-family:'Space Grotesk';font-weight:700;font-size:19px;letter-spacing:-0.01em;
+  }
+  .logo-mark{
+    width:26px;height:26px;border-radius:7px;
+    background:linear-gradient(135deg,var(--gold),var(--teal));
+    flex-shrink:0;
+  }
+  nav .tag{color:var(--muted);font-size:13px;font-family:'JetBrains Mono';}
+
+  /* ---------- HERO ---------- */
+  .hero{padding:76px 0 48px;}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:'JetBrains Mono';font-size:12px;letter-spacing:0.06em;
+    color:var(--gold); text-transform:uppercase;
+    margin-bottom:22px;
+  }
+  .eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--gold);
+    box-shadow:0 0 0 4px rgba(255,176,32,0.15);}
+  h1{
+    font-size:clamp(34px,5.4vw,58px);
+    line-height:1.05;
+    font-weight:700;
+    letter-spacing:-0.02em;
+    max-width:820px;
+  }
+  h1 span{color:var(--muted);}
+  .sub{
+    margin-top:20px;max-width:560px;
+    color:var(--muted);font-size:16.5px;line-height:1.6;
+  }
+
+  /* ---------- CONTROL PANEL (signature element) ---------- */
+  .panel{
+    margin-top:52px;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:14px;
+    overflow:hidden;
+  }
+  .panel-head{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 20px;
+    border-bottom:1px solid var(--line);
+    font-family:'JetBrains Mono';font-size:12px;color:var(--muted);
+  }
+  .dots{display:flex;gap:6px;}
+  .dots span{width:8px;height:8px;border-radius:50%;background:var(--line);}
+  .panel-grid{
+    display:grid;grid-template-columns:repeat(4,1fr);
+  }
+  .stat{
+    padding:22px 20px;
+    border-right:1px solid var(--line);
+  }
+  .stat:last-child{border-right:none;}
+  .stat .k{font-family:'JetBrains Mono';font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;}
+  .stat .v{font-family:'Space Grotesk';font-size:26px;font-weight:600;margin-top:8px;color:var(--paper);}
+  .stat .v small{font-size:14px;color:var(--teal);font-weight:500;margin-left:4px;}
+
+  /* ---------- SECTION LABEL ---------- */
+  .section{padding:88px 0;border-top:1px solid var(--line);}
+  .section-head{
+    display:flex;align-items:baseline;justify-content:space-between;
+    margin-bottom:44px;flex-wrap:wrap;gap:10px;
+  }
+  .section-head h2{
+    font-family:'Space Grotesk';font-size:clamp(24px,3vw,32px);font-weight:600;letter-spacing:-0.01em;
+  }
+  .section-head .count{font-family:'JetBrains Mono';font-size:13px;color:var(--muted);}
+
+  /* ---------- MENU LIST ---------- */
+  .menu-item{
+    display:grid;grid-template-columns:60px 1fr auto;gap:22px;align-items:start;
+    padding:26px 0;border-bottom:1px solid var(--line);
+    transition:padding-left .25s ease;
+  }
+  .menu-item:hover{padding-left:8px;}
+  .menu-item:last-child{border-bottom:none;}
+  .m-num{font-family:'JetBrains Mono';color:var(--gold);font-size:13px;padding-top:4px;}
+  .m-body h3{font-family:'Space Grotesk';font-size:19px;font-weight:600;margin-bottom:6px;}
+  .m-body p{color:var(--muted);font-size:14.5px;line-height:1.55;max-width:480px;}
+  .m-tags{display:flex;gap:8px;flex-wrap:wrap;align-self:start;padding-top:5px;}
+  .m-tags span{
+    font-family:'JetBrains Mono';font-size:10.5px;color:var(--teal);
+    border:1px solid rgba(56,191,167,0.3);border-radius:20px;padding:4px 10px;
+    white-space:nowrap;
+  }
+
+  /* ---------- PRICING ---------- */
+  .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+  .plan{
+    background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    padding:30px 26px;display:flex;flex-direction:column;
+    position:relative;
+  }
+  .plan.featured{
+    border-color:var(--gold);
+    background:linear-gradient(180deg,var(--panel-2),var(--panel));
+  }
+  .plan.featured::before{
+    content:"MOST BOOKED";
+    position:absolute;top:-11px;left:26px;
+    background:var(--gold);color:var(--ink);
+    font-family:'JetBrains Mono';font-size:10px;font-weight:500;letter-spacing:0.05em;
+    padding:4px 10px;border-radius:20px;
+  }
+  .plan .p-name{font-family:'Space Grotesk';font-size:15px;color:var(--muted);text-transform:uppercase;letter-spacing:0.04em;}
+  .plan .p-price{font-family:'Space Grotesk';font-size:38px;font-weight:700;margin-top:14px;}
+  .plan .p-price span{font-size:14px;color:var(--muted);font-weight:400;font-family:'Inter';}
+  .plan .p-desc{color:var(--muted);font-size:13.5px;margin-top:10px;line-height:1.5;min-height:40px;}
+  .plan ul{list-style:none;margin-top:22px;flex:1;}
+  .plan li{
+    font-size:14px;padding:9px 0;border-top:1px solid var(--line);
+    display:flex;gap:10px;align-items:flex-start;color:var(--paper);
+  }
+  .plan li::before{content:"—";color:var(--teal);flex-shrink:0;}
+  .plan.featured li::before{color:var(--gold);}
+
+  /* ---------- PROCESS ---------- */
+  .flow{display:flex;flex-direction:column;}
+  .flow-row{
+    display:grid;grid-template-columns:100px 1fr;gap:20px;
+    padding:20px 0;border-bottom:1px solid var(--line);
+  }
+  .flow-row:last-child{border-bottom:none;}
+  .flow-row .f-day{font-family:'JetBrains Mono';color:var(--gold);font-size:13px;padding-top:2px;}
+  .flow-row h4{font-family:'Space Grotesk';font-size:16.5px;font-weight:600;margin-bottom:5px;}
+  .flow-row p{color:var(--muted);font-size:14px;line-height:1.5;max-width:520px;}
+
+  /* ---------- CTA ---------- */
+  .cta{
+    text-align:center;padding:90px 0 100px;
+  }
+  .cta h2{font-family:'Space Grotesk';font-size:clamp(28px,4vw,42px);font-weight:700;letter-spacing:-0.02em;max-width:640px;margin:0 auto;}
+  .cta p{color:var(--muted);margin-top:16px;font-size:15.5px;}
+  .cta-btn{
+    display:inline-flex;align-items:center;gap:10px;
+    margin-top:32px;padding:15px 30px;
+    background:var(--gold);color:var(--ink);
+    font-family:'Space Grotesk';font-weight:600;font-size:15px;
+    border-radius:9px;text-decoration:none;
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .cta-btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(255,176,32,0.25);}
+
+  footer{
+    border-top:1px solid var(--line);
+    padding:26px 0 40px;
+    display:flex;justify-content:space-between;align-items:center;
+    color:var(--muted);font-size:12.5px;font-family:'JetBrains Mono';
+    flex-wrap:wrap;gap:10px;
+  }
+
+  @media (max-width:760px){
+    .panel-grid{grid-template-columns:repeat(2,1fr);}
+    .stat:nth-child(2){border-right:none;}
+    .stat{border-bottom:1px solid var(--line);}
+    .plans{grid-template-columns:1fr;}
+    .menu-item{grid-template-columns:36px 1fr;}
+    .m-tags{grid-column:2 / 3;padding-top:0;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <nav>
+    <div class="logo"><div class="logo-mark"></div>Social AI</div>
+    <div class="tag">content · ads · brand · web</div>
+  </nav>
+
+  <section class="hero">
+    <div class="eyebrow">Service menu</div>
+    <h1>We plan the content.<br>We run the ads.<br><span>You watch the leads come in.</span></h1>
+    <p class="sub">A single team handling content creation, paid Meta &amp; Google ads, and brand
+    presence — so nothing falls through the gap between "who's posting" and "who's running the campaign."</p>
+
+    <div class="panel">
+      <div class="panel-head">
+        <span>social-ai / active-retainer.log</span>
+        <div class="dots"><span></span><span></span><span></span></div>
+      </div>
+      <div class="panel-grid">
+        <div class="stat"><div class="k">Content cadence</div><div class="v">6–8<small>videos/mo</small></div></div>
+        <div class="stat"><div class="k">Ad variants tested</div><div class="v">15–20<small>/mo</small></div></div>
+        <div class="stat"><div class="k">Creative refresh</div><div class="v">5–7<small>days</small></div></div>
+        <div class="stat"><div class="k">Reporting</div><div class="v">Monthly<small>+ weekly</small></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="menu">
+    <div class="section-head">
+      <h2>The menu</h2>
+      <div class="count">05 services</div>
+    </div>
+
+    <div class="menu-item">
+      <div class="m-num">01</div>
+      <div class="m-body">
+        <h3>Content Creation</h3>
+        <p>Reels, carousels and static posts built around a hook-first structure — shot, cut and
+        captioned for how people actually scroll.</p>
+      </div>
+      <div class="m-tags"><span>REELS</span><span>CAROUSELS</span></div>
+    </div>
+
+    <div class="menu-item">
+      <div class="m-num">02</div>
+      <div class="m-body">
+        <h3>Video Editing</h3>
+        <p>Raw footage turned into short-form cuts optimized for watch-time and hook rate, plus
+        variant cuts for A/B testing across ad sets.</p>
+      </div>
+      <div class="m-tags"><span>SHORT-FORM</span><span>VARIANTS</span></div>
+    </div>
+
+    <div class="menu-item">
+      <div class="m-num">03</div>
+      <div class="m-body">
+        <h3>Meta &amp; Google Ads</h3>
+        <p>Full-funnel paid campaigns — audience testing, weekly creative rotation, and budget
+        moved toward whatever's actually converting.</p>
+      </div>
+      <div class="m-tags"><span>META</span><span>GOOGLE</span></div>
+    </div>
+
+    <div class="menu-item">
+      <div class="m-num">04</div>
+      <div class="m-body">
+        <h3>Brand Building</h3>
+        <p>Page setup, visual identity and positioning — so the account looks like a business
+        worth buying from before an ad ever runs.</p>
+      </div>
+      <div class="m-tags"><span>IDENTITY</span><span>POSITIONING</span></div>
+    </div>
+
+    <div class="menu-item">
+      <div class="m-num">05</div>
+      <div class="m-body">
+        <h3>Web Development</h3>
+        <p>Landing pages and e-commerce storefronts built to convert ad traffic, not just look
+        good sitting still.</p>
+      </div>
+      <div class="m-tags"><span>LANDING PAGES</span><span>E-COMMERCE</span></div>
+    </div>
+  </section>
+
+  <section class="section" id="pricing">
+    <div class="section-head">
+      <h2>Retainers</h2>
+      <div class="count">monthly, cancel with 30-day notice</div>
+    </div>
+
+    <div class="plans">
+      <div class="plan">
+        <div class="p-name">Starter</div>
+        <div class="p-price">₹15,000<span>/mo</span></div>
+        <div class="p-desc">For a business that needs a consistent posting rhythm before it's ready to spend on ads.</div>
+        <ul>
+          <li>8 organic posts / month</li>
+          <li>4 reels / month</li>
+          <li>Page &amp; profile setup</li>
+          <li>Monthly report</li>
+        </ul>
+      </div>
+
+      <div class="plan featured">
+        <div class="p-name">Growth</div>
+        <div class="p-price">₹25,000<span>/mo</span></div>
+        <div class="p-desc">Content and paid ads run together — the pace built for a business ready to scale leads.</div>
+        <ul>
+          <li>12 posts + 4–6 reels / month</li>
+          <li>Meta ads setup &amp; management</li>
+          <li>Weekly creative refresh</li>
+          <li>15–20 ad variants tested / month</li>
+          <li>Monthly report + weekly check-in</li>
+        </ul>
+      </div>
+
+      <div class="plan">
+        <div class="p-name">Scale</div>
+        <div class="p-price">₹40,000<span>/mo+</span></div>
+        <div class="p-desc">Multi-platform campaigns with a dedicated account rhythm for businesses spending seriously on ads.</div>
+        <ul>
+          <li>Everything in Growth</li>
+          <li>Meta + Google Ads</li>
+          <li>Landing page / storefront support</li>
+          <li>Priority creative turnaround</li>
+          <li>Dedicated weekly strategy call</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="process">
+    <div class="section-head">
+      <h2>How a month runs</h2>
+      <div class="count">growth retainer</div>
+    </div>
+    <div class="flow">
+      <div class="flow-row">
+        <div class="f-day">WEEK 1</div>
+        <div><h4>Shoot &amp; plan</h4><p>Content batch shot for the month, ad angles mapped against the offer, calendar locked.</p></div>
+      </div>
+      <div class="flow-row">
+        <div class="f-day">WEEK 2</div>
+        <div><h4>Launch &amp; test</h4><p>Organic goes live on schedule, first ad variants launch, early signal reviewed at 48–72hrs.</p></div>
+      </div>
+      <div class="flow-row">
+        <div class="f-day">WEEK 3</div>
+        <div><h4>Cut &amp; scale</h4><p>Underperforming variants killed, budget shifted to winners, new hooks queued.</p></div>
+      </div>
+      <div class="flow-row">
+        <div class="f-day">WEEK 4</div>
+        <div><h4>Report &amp; plan next</h4><p>Monthly report delivered, results reviewed together, next month's angles set.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <h2>Ready to put content and ads under one roof?</h2>
+    <p>Free audit of your current page and ad account — no commitment.</p>
+    <a class="cta-btn" href="https://docs.google.com/forms/d/e/1FAIpQLSdZGvE6fWNu0Ev4qsEHuQtXaI8sZISSKhV8qT3lEb5rocuNMg/alreadyresponded" target="_blank" rel="noopener">Book a free audit →</a>
+  </section>
+
+  <footer>
+    <span>Social AI — digital marketing agency</span>
+    <span>India</span>
+  </footer>
+
+</div>
+
+</body>
+</html>
